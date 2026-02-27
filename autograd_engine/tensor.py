@@ -24,14 +24,18 @@ class Tensor:
         result = Tensor(self.data * other.data, _children=(self, other), _op='*')
         return result
 
-if __name__ == "__main__":
-    a = Tensor([2.0])
-    b = Tensor([3.0])
-    c = a * b
-    d = c + a
+    def __neg__(self):
+        reult = Tensor(-self.data, _children=(self,), _op='neg')
+        return result
 
-    print(a)
-    print(c)
-    print(d)
-    print(d._prev)
-    print(d._op)
+    def __pow__(self, exponent):
+        result = Tensor(self.data ** exponent, _children=(self,), _op='**')
+        return result
+
+    def __radd__(self, other):
+        return self + other
+
+    def __rmul__(self, other):
+        return self * other
+
+        
