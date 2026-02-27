@@ -25,7 +25,7 @@ class Tensor:
         return result
 
     def __neg__(self):
-        reult = Tensor(-self.data, _children=(self,), _op='neg')
+        result = Tensor(-self.data, _children=(self,), _op='neg')
         return result
 
     def __pow__(self, exponent):
@@ -38,4 +38,19 @@ class Tensor:
     def __rmul__(self, other):
         return self * other
 
-        
+    def exp(self):
+        result = Tensor(np.exp(self.data), _children=(self,), _op='exp')
+        return result
+
+    def log(self):
+        result = Tensor(np.log(self.data), _children=(self,), _op='log')
+        return result
+
+    def relu(self):
+        result = Tensor(np.maximum(0, self.data), _children=(self,), _op='relu')
+        return result
+
+    def sum(self):
+        result = Tensor(np.sum(self.data), _children=(self,), _op='sum')
+        return result
+
