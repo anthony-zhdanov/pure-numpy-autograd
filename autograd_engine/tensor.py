@@ -16,11 +16,13 @@ class Tensor:
     def __repr__(self):
         return f"Tensor(data={self.data}, grad={self.grad})"
 
-    def __add__(self, other): 
+    def __add__(self, other):
+        other = other if isinstance(other, Tensor) else Tensor(other) 
         result = Tensor(self.data + other.data, _children=(self, other), _op='+')
         return result
     
     def __mul__(self, other):
+        other = other if isinstance(other, Tensor) else Tensor(other)
         result = Tensor(self.data * other.data, _children=(self, other), _op='*')
         return result
 
@@ -37,6 +39,14 @@ class Tensor:
 
     def __rmul__(self, other):
         return self * other
+
+    def __sub__(self, other):
+        other = other if isinstance(other, Tensor) else Tensor(other)
+        return self + (-other)
+
+    def __truediv__(self, other):
+        other = other if isinstance(other, Tensor) else Tensor(other)
+        return self * (other ** -1)
 
     def exp(self):
         result = Tensor(np.exp(self.data), _children=(self,), _op='exp')
