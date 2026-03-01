@@ -54,7 +54,9 @@ class Tensor:
 
     def __neg__(self):
         """
-        Negates the tensor element-wise. Used internally by __sub__ and anywhere a sign flip is needed.
+        Negates the tensor element-wise. 
+        
+        Used internally by __sub__ and anywhere a sign flip is needed.
         """
         result = Tensor(-self.data, _children=(self,), _op='neg')
         return result
