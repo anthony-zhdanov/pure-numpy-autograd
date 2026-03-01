@@ -1,6 +1,9 @@
 import numpy as np
 
-class Tensor: 
+class Tensor:
+    """
+    Represents a node within a multi-layer simple neural network.
+    """ 
     def __init__(self, data, _children=(), _op=''):
         
         self.data = np.array(data, dtype=np.float64)
@@ -14,9 +17,15 @@ class Tensor:
         self._op = _op
     
     def __repr__(self):
+        """
+        Representation dunder method allowing a Tensor itself to be an output.
+        """
         return f"Tensor(data={self.data}, grad={self.grad})"
 
     def __add__(self, other):
+        """
+        Addition function allowing Tensors' values to be added
+        """
         other = other if isinstance(other, Tensor) else Tensor(other) 
         result = Tensor(self.data + other.data, _children=(self, other), _op='+')
         return result
