@@ -24,18 +24,24 @@ class Tensor:
 
     def __add__(self, other):
         """
-        Addition function allowing Tensors' values to be added
+        Addition dunder method allowing sum of Tensors' values to be calculated. To be used as the underlying function used for any instance of Tensor addition.
         """
         other = other if isinstance(other, Tensor) else Tensor(other) 
         result = Tensor(self.data + other.data, _children=(self, other), _op='+')
         return result
     
     def __mul__(self, other):
+        """
+        Multiplication dunder method allowing Tensors' products to be calculated. Arguably the most important function within neural net architecture.
+        """
         other = other if isinstance(other, Tensor) else Tensor(other)
         result = Tensor(self.data * other.data, _children=(self, other), _op='*')
         return result
 
     def __neg__(self):
+        """
+        Negation dunder method to be used to negate a Tensor instance. To be used within cross-entropy loss calculations.
+        """
         result = Tensor(-self.data, _children=(self,), _op='neg')
         return result
 
