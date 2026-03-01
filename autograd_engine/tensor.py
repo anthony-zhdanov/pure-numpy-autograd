@@ -2,7 +2,12 @@ import numpy as np
 
 class Tensor:
     """
-    Represents a node within a multi-layer simple neural network.
+    Represents a node in a computation graph. 
+    Implemented by wrapping a numpy array.
+
+    Tracks the data, gradient, and each individual node's
+    connectivity to be used for low-level implementation 
+    of backpropogation
     """ 
     def __init__(self, data, _children=(), _op=''):
         
@@ -18,13 +23,18 @@ class Tensor:
     
     def __repr__(self):
         """
-        Representation dunder method allowing a Tensor itself to be an output.
+        Returns a string representation of the Tensor.
+        Shows it's data and current gradient.
         """
         return f"Tensor(data={self.data}, grad={self.grad})"
 
     def __add__(self, other):
         """
-        Addition dunder method allowing sum of Tensors' values to be calculated. To be used as the underlying function used for any instance of Tensor addition.
+        Computes the element-wise addition of two tensors.
+
+        Scalars are automatically wrapped in a Tensor. 
+        Records both operands as _children in the
+        computation graph for the backward pass.
         """
         other = other if isinstance(other, Tensor) else Tensor(other) 
         result = Tensor(self.data + other.data, _children=(self, other), _op='+')
@@ -32,7 +42,11 @@ class Tensor:
     
     def __mul__(self, other):
         """
-        Multiplication dunder method allowing Tensors' products to be calculated. Arguably the most important function within neural net architecture.
+        Computes element-wise multiplication of two tensors. 
+
+        Scalars are automatically wrapped in a Tensor. 
+        Records both operands as _children in the
+        computation graph for the backward pass.
         """
         other = other if isinstance(other, Tensor) else Tensor(other)
         result = Tensor(self.data * other.data, _children=(self, other), _op='*')
@@ -40,7 +54,7 @@ class Tensor:
 
     def __neg__(self):
         """
-        Negation dunder method to be used to negate a Tensor instance. To be used within cross-entropy loss calculations.
+        Negates the tensor element-wise. Used internally by __sub__ and anywhere a sign flip is needed.
         """
         result = Tensor(-self.data, _children=(self,), _op='neg')
         return result
