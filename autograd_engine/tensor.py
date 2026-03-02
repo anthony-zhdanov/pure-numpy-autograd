@@ -38,6 +38,12 @@ class Tensor:
         """
         other = other if isinstance(other, Tensor) else Tensor(other) 
         result = Tensor(self.data + other.data, _children=(self, other), _op='+')
+
+        def _backward():
+            self.grad += result.grad
+            other.grad += result.grad
+        result._backward = _backward
+
         return result
     
     def __mul__(self, other):
