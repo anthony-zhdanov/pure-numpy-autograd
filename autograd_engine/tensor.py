@@ -1,4 +1,5 @@
-import numpy as np
+import numpy as np 
+
 
 class Tensor:
     """
@@ -80,6 +81,11 @@ class Tensor:
 
     def __pow__(self, exponent):
         result = Tensor(self.data ** exponent, _children=(self,), _op='**')
+        
+        def _backward():
+            self.grad += exponent * self.data ** (exponent - 1) * result.grad
+        result._backward = _backward
+
         return result
 
     def __radd__(self, other):
