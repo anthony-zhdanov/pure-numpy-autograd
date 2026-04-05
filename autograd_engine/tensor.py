@@ -71,6 +71,11 @@ class Tensor:
         Used internally by __sub__ and anywhere a sign flip is needed.
         """
         result = Tensor(-self.data, _children=(self,), _op='neg')
+        
+        def _backward():
+            self.grad += -result.grad
+        result._backward = _backward
+        
         return result
 
     def __pow__(self, exponent):
