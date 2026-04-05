@@ -104,6 +104,11 @@ class Tensor:
 
     def exp(self):
         result = Tensor(np.exp(self.data), _children=(self,), _op='exp')
+        
+        def _backward():
+            self.grad += result.data * result.grad
+        result._backward = _backward
+
         return result
 
     def log(self):
