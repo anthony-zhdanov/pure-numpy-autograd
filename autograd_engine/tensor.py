@@ -113,9 +113,14 @@ class Tensor:
 
     def log(self):
         result = Tensor(np.log(self.data), _children=(self,), _op='log')
+
+        def _backward():
+            self.grad += 1/self.data * result.grad
+        result._backward = _backward
+
         return result
 
-    def relu(self):
+    def relu():
         result = Tensor(np.maximum(0, self.data), _children=(self,), _op='relu')
         return result
 
