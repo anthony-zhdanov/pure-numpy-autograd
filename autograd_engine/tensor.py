@@ -120,8 +120,13 @@ class Tensor:
 
         return result
 
-    def relu():
+    def relu(self):
         result = Tensor(np.maximum(0, self.data), _children=(self,), _op='relu')
+        
+        def _backward():
+            self.grad += (result.data > 0) * result.grad
+        result._backward = _backward
+
         return result
 
     def sum(self):
