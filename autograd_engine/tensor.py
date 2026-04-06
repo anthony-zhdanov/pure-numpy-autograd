@@ -131,5 +131,10 @@ class Tensor:
 
     def sum(self):
         result = Tensor(np.sum(self.data), _children=(self,), _op='sum')
+        
+        def _backward():
+            self.grad += result.grad * np.ones_like(self.data)
+        result._backward = _backward
+
         return result
 
