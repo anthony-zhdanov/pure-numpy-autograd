@@ -205,3 +205,24 @@ class Tensor:
 
         return result
 
+    def backward(self):
+        """
+        Applies topological sort to neurons, initializes output gradient to 1,
+        and propagates to child neurons to obtain their gradients using
+        chain rule.
+        """
+        topo = []
+        visited = set()
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(child)
+                topo.append(v)
+        build_topo(self)
+
+        self.grad = np.ones_like(self.data)
+        for v in reversed(topo):
+            v._backward()
+
+
